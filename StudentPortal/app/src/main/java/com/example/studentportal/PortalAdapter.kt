@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_create_portal.view.*
+import kotlinx.android.synthetic.main.item_portal.view.*
 
 public class PortalAdapter(private val portals: List<Portal>) : RecyclerView.Adapter<PortalAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,8 +24,8 @@ public class PortalAdapter(private val portals: List<Portal>) : RecyclerView.Ada
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(portal : Portal){
-            //itemView.btnAddPortal.set
-            itemView.btnAddPortal.text = portal.portalTitle + "/n" + portal.portalUrl
+            //itemView.tvTest.text = portal.portalTitle
+            itemView.btnPortal.text = portal.portalTitle
         }
     }
 }

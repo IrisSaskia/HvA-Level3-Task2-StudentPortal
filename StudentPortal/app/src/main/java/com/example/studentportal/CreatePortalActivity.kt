@@ -1,10 +1,12 @@
 package com.example.studentportal
 
 import Portal
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_portal.*
 
 class CreatePortalActivity : AppCompatActivity() {
@@ -36,13 +38,31 @@ class CreatePortalActivity : AppCompatActivity() {
     }
 
     private fun onAddPortalClick() {
-        val portal = Portal(
-            etTitle.text.toString(),
-            etURL.text.toString()
-        )
+//        val portal = Portal(
+//            etTitle.text.toString(),
+//            etURL.text.toString()
+//        )
+//
+//        val portalActivityIntent = Intent(this, MainActivity::class.java)
+//        portalActivityIntent.putExtra(MainActivity.PORTAL_EXTRA, portal)
+//        startActivity(portalActivityIntent)
 
-        val profileActivityIntent = Intent(this, MainActivity::class.java)
-        profileActivityIntent.putExtra(MainActivity.PORTAL_EXTRA, portal)
-        startActivity(profileActivityIntent)
+        if (etTitle.text.toString().isNotBlank() && etURL.text.toString().isNotBlank()) {
+            val portal = Portal(
+                etTitle.text.toString(),
+                etURL.text.toString()
+            )
+            var resultIntent = Intent()
+            resultIntent.putExtra(PORTAL_EXTRA, portal)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        } else {
+            Toast.makeText(this,"The fields cannot be empty"
+                , Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object {
+        const val PORTAL_EXTRA = "PORTAL_EXTRA"
     }
 }

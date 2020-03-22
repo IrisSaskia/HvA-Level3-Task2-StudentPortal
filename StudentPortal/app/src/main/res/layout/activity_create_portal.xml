@@ -18,7 +18,8 @@
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title_hint" />
+            android:hint="@string/title_hint"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -33,7 +34,8 @@
             android:id="@+id/etURL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/url_hint" />
+            android:hint="@string/url_hint"
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
