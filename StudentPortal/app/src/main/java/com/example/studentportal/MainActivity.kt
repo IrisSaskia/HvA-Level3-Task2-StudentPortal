@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun onAddClick() {
         val profileActivityIntent = Intent(this, CreatePortalActivity::class.java)
-        //profileActivityIntent.putExtra(CreatePortalActivity.PROFILE_EXTRA, profile)
         startActivity(profileActivityIntent)
     }
 
