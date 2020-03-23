@@ -24,7 +24,7 @@ public class PortalAdapter(private val portals: List<Portal>, val clickListener:
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(portal: Portal, clickListener: (Portal) -> Unit){
-            itemView.btnPortal.text = portal.portalTitle
+            itemView.btnPortal.text = portal.portalTitle + " " + portal.portalUrl
             itemView.btnPortal.setOnClickListener{clickListener(portal)}
         }
     }
