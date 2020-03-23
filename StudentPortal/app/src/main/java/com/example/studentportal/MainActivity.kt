@@ -3,11 +3,16 @@ package com.example.studentportal
 import Portal
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.studentportal.CreatePortalActivity.Companion.PORTAL_EXTRA
@@ -18,8 +23,10 @@ import kotlinx.android.synthetic.main.content_main.*
 const val ADD_PORTAL_REQUEST_CODE = 100
 
 class MainActivity : AppCompatActivity() {
+    private var customTabHelper: CustomTabHelper = CustomTabHelper()
+
     private var portals = arrayListOf<Portal>()
-    private val portalAdapter = PortalAdapter(portals)
+    private val portalAdapter = PortalAdapter(portals) { portal : Portal -> portalClicked(portal)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,23 +44,56 @@ class MainActivity : AppCompatActivity() {
         rvPortals.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         rvPortals.adapter = portalAdapter
 
-//        val portal = intent.getParcelableExtra<Portal>(PORTAL_EXTRA)
-
-        portals.add(Portal("test", "test"))
-//        if (portal != null) {
-//            portals.add(Portal(portal.portalTitle, portal.portalUrl))
-//        }
-
-        /*for(i in portals) {
-
-        }*/
-
-        //portalAdapter.notifyDataSetChanged()
+        portals.add(Portal("test", "www.google.com"))
     }
 
     private fun onAddClick() {
         val portalAddActivityIntent = Intent(this, CreatePortalActivity::class.java)
         startActivityForResult(portalAddActivityIntent, ADD_PORTAL_REQUEST_CODE)
+    }
+
+    private fun portalClicked(portal : Portal) {
+        Toast.makeText(this, "Clicked: ${portal.portalTitle}", Toast.LENGTH_LONG).show()
+
+        val builder = CustomTabsIntent.Builder()
+        // modify toolbar color
+        builder.setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.colorPrimary))
+        // add share button to overflow menu
+        builder.addDefaultShareMenuItem()
+
+        val anotherCustomTab = CustomTabsIntent.Builder().build()
+
+        val requestCode = 100
+        val intent = anotherCustomTab.intent
+        intent.setData(Uri.parse(portal.portalUrl))
+
+        val pendingIntent = PendingIntent.getActivity(this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+
+
+        // add menu item to oveflow
+        builder.addMenuItem("MENU_ITEM_NAME", pendingIntent)
+
+        // show website title
+        builder.setShowTitle(true)
+
+        // animation for enter and exit of tab
+        builder.setStartAnimations(this, android.R.anim.fade_in, android.R.anim.fade_out)
+        builder.setExitAnimations(this, android.R.anim.fade_in, android.R.anim.fade_out)
+        //By default, if we don’t set any animations then the Custom Tab will enter from the Bottom to the Top and exit from the Top to the Bottom.
+
+        val customTabsIntent = builder.build()
+
+        // check is chrome available
+        val packageName = customTabHelper.getPackageNameToUse(this, portal.portalUrl)
+        if (packageName == null)
+        // if chrome not available open in web view
+        else {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(this, Uri.parse(portal.portalUrl))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

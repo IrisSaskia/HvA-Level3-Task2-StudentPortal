@@ -27,7 +27,7 @@ class CreatePortalActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item?.itemId) {
             android.R.id.home -> {
                 finish()
@@ -38,15 +38,6 @@ class CreatePortalActivity : AppCompatActivity() {
     }
 
     private fun onAddPortalClick() {
-//        val portal = Portal(
-//            etTitle.text.toString(),
-//            etURL.text.toString()
-//        )
-//
-//        val portalActivityIntent = Intent(this, MainActivity::class.java)
-//        portalActivityIntent.putExtra(MainActivity.PORTAL_EXTRA, portal)
-//        startActivity(portalActivityIntent)
-
         if (etTitle.text.toString().isNotBlank() && etURL.text.toString().isNotBlank()) {
             val portal = Portal(
                 etTitle.text.toString(),
